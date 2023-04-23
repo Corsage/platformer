@@ -1,0 +1,161 @@
+{
+  "name": "base",
+  "columns": 20,
+  "rows": 9,
+  "margin": 0,
+  "spacing": 0,
+  "tiles": [
+    {
+      "id": 0,
+      "type": "floor"
+    },
+    {
+      "id": 1,
+      "type": "floor"
+    },
+    {
+      "id": 2,
+      "type": "floor"
+    },
+    {
+      "id": 3,
+      "type": "floor"
+    },
+    {
+      "id": 20,
+      "type": "floor"
+    },
+    {
+      "id": 21,
+      "type": "floor"
+    },
+    {
+      "id": 22,
+      "type": "floor"
+    },
+    {
+      "id": 23,
+      "type": "floor"
+    },
+    {
+      "id": 40,
+      "type": "floor"
+    },
+    {
+      "id": 41,
+      "type": "floor"
+    },
+    {
+      "id": 42,
+      "type": "floor"
+    },
+    {
+      "id": 43,
+      "type": "floor"
+    },
+    {
+      "id": 60,
+      "type": "floor"
+    },
+    {
+      "id": 61,
+      "type": "floor"
+    },
+    {
+      "id": 62,
+      "type": "floor"
+    },
+    {
+      "id": 63,
+      "type": "floor"
+    },
+    {
+      "id": 80,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 81,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 82,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 83,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 100,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 101,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 102,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    },
+    {
+      "id": 103,
+      "properties": [
+        {
+          "name": "velocity",
+          "type": "float",
+          "value": 1.2
+        }
+      ],
+      "type": "floor"
+    }
+  ]
+}
