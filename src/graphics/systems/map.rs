@@ -15,7 +15,7 @@ pub fn spawn_scene_renderer(
     assets: Res<TileMapAsset>,
 ) {
     for (entity, tile, position) in query.iter() {
-        let mut sprite = TextureAtlasSprite::new(tile.i);
+        let mut sprite = TextureAtlasSprite::new(tile.id as usize);
         sprite.custom_size = Some(Vec2::splat(TILE_SIZE));
 
         let v = get_world_position(&position);

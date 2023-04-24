@@ -3,7 +3,6 @@ use bevy::{asset::LoadState, prelude::*};
 use crate::{game::GameState, AppState, AssetList};
 
 pub struct SplashPlugin;
-
 impl Plugin for SplashPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<AssetList>()

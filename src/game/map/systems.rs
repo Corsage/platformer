@@ -1,14 +1,15 @@
 use bevy::{
-    prelude::{AssetServer, Assets, Commands, Res, ResMut, Vec2},
+    prelude::{info, AssetServer, Assets, Commands, Entity, Res, ResMut, Vec2},
     sprite::TextureAtlas,
 };
+use bevy_rapier2d::prelude::{Collider, RigidBody};
 
 use crate::{graphics::TILE_SIZE, utils::vectors::Vector3Int, AssetList};
 
 use super::{
     components::{Position, Tile},
-    resources::{Board, SceneHandle, TileMapAsset},
-    Scene,
+    resources::{Board, SceneHandle, SceneInfoHandle, TileMapAsset, Tilemap},
+    structs::{Scene, SceneInfo},
 };
 
 pub fn load_scene_data(
@@ -17,10 +18,12 @@ pub fn load_scene_data(
     mut atlas: ResMut<Assets<TextureAtlas>>,
     mut assets: ResMut<AssetList>,
 ) {
-    let scene = server.load("maps\\test.json");
-    let texture = server.load("tilemaps\\base.png");
+    let scene = server.load("maps\\test.scene.json");
+    let scene_info = server.load("tiles\\map\\base\\data.tiles.json");
+    let texture = server.load("tiles\\map\\base\\tilemap.png");
 
     assets.0.push(scene.clone_untyped());
+    assets.0.push(scene_info.clone_untyped());
     assets.0.push(texture.clone_untyped());
 
     // TODO: Make tile size, columns, rows dynamic from data file.
@@ -34,14 +37,26 @@ pub fn load_scene_data(
 
     // Add the data asset.
     commands.insert_resource(SceneHandle(scene));
+    commands.insert_resource(SceneInfoHandle(scene_info));
 }
 
 pub fn load_scene(
     mut commands: Commands,
     scene: Res<SceneHandle>,
+    scene_info: Res<SceneInfoHandle>, // Maybe remove later on?
+    mut scene_infos: ResMut<Assets<SceneInfo>>, // Maybe remove later on?
     mut scenes: ResMut<Assets<Scene>>,
     mut current: ResMut<Board>,
+    mut tilemap: ResMut<Tilemap>, // Maybe remove later on?
 ) {
+    // First get the tilemap data.
+    if let Some(scene_info) = scene_infos.remove(scene_info.0.id()) {
+        for tile in scene_info.tiles.iter() {
+            tilemap.tiles.insert(tile.id, tile.to_owned());
+        }
+    }
+
+    // Load the map tiles after getting tilemap data.
     if let Some(scene) = scenes.remove(scene.0.id()) {
         // Load scene layer by layer, increasing the z-index as we do.
         let mut z: i32 = 0;
@@ -57,10 +72,38 @@ pub fn load_scene(
                     let y = 10 - (pos as i32) / 30;
 
                     let v = Vector3Int::new(x, y, z);
-                    let tile = commands
-                        .spawn((Position { v }, Tile { i: index as usize }))
-                        .id(); // Offset by 1.
-                    current.tiles.insert(v, tile);
+
+                    let entity: Entity;
+
+                    // See if this is a special tile.
+                    if tilemap.tiles.contains_key(&(index as u16)) {
+                        let tile = tilemap.tiles.get(&(index as u16)).unwrap().clone();
+                        info!("Found tile with data {:?}", tile);
+
+                        let mut command = commands.spawn_empty();
+
+                        if tile.type_field.clone().unwrap() == String::from("floor") {
+                            info!("Found floor tile.");
+                            command
+                                .commands()
+                                .spawn((RigidBody::Fixed, Collider::cuboid(9.0, 9.0)));
+                        }
+
+                        command.commands().spawn((Position { v }, tile));
+                        entity = command.id();
+                    } else {
+                        entity = commands
+                            .spawn((
+                                Position { v },
+                                Tile {
+                                    id: index as u16,
+                                    type_field: None,
+                                    properties: None,
+                                },
+                            ))
+                            .id();
+                    }
+                    current.tiles.insert(v, entity);
                 }
             }
         }
